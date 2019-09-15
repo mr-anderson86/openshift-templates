@@ -46,3 +46,8 @@ objects:
         name: ${IMAGE_TAG}
 
 
+# That's where all the magic happens :-)
+# this will allow you to roll back and forward with you deployments if you recognize that some deployment is bad or bugged.
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
