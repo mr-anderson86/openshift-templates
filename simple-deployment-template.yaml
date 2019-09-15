@@ -12,6 +12,23 @@ metadata:
     tags: some,tag,whatever
     name: my-simple-app
 
+parameters:
+- name: SERVICE_NAME
+  displayName: Service Name
+  description: Service name for your application
+  required: false
+  value: my-simple-app
+- name: IMAGE_TAG
+  displayName: Image Tag
+  description: Docker image tag to use on the pod, default=latest.
+  required: false
+  value: latest
+- name: PORT_NUMBER
+  displayName: port
+  description: Port number, default=8080.
+  required: false
+  value: "8080"
+
 objects:
 # You'll need this kind of secret if your docker registry needs some login
 # Otherwise (if docker registry is public), skip it
