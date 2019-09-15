@@ -31,4 +31,18 @@ objects:
   kind: ImageStream
   metadata:
     name: ${SERVICE_NAME}
-  name: registry.host/path/to/docker/image
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+      - from:
+          kind: DockerImage
+          name: registry.host/path/to/docker/image
+        importPolicy:
+          # if youre registry is using secure but you don't can allow yourself to skip it...
+          insecure: true
+        referencePolicy:
+          type: Local
+        name: ${IMAGE_TAG}
+
+
