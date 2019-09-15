@@ -15,21 +15,19 @@ This repo contains a simple deployment file to use in OpenShift.
 * Route, so that the service (and pods) will be accessible from anywhere (including your own computer).
 
 ### Usage:
-First, you need to login ;-)
 ```bash
+# First, you need to login ;-)
 oc login <OS address> <your credentials or token>
-```
 
-The command below will show you the json output, after processing the parameters.  
-The below will give the output with default values:
-```bash
+# The next command will show you the json output, after processing the parameters,
+# It's not must, but recommended, to make sure values are correct.
+
+# The below will give the output with default values:
 oc process -f simple-deployment-template.yaml
-```
-The below will give the output with given values, for example:
-```bash
+
+# The below will give the output with given values, for example:
 oc process -f simple-deployment-template.yaml -p SERVICE_NAME=my-servicename -p IMAGE_TAG=some-image-tag
-```
-The command below will perform the actual deployment:
-```bash
+
+# The command below will perform the actual deployment:
 oc process -f simple-deployment-template.yaml [-p PARAM=value] | oc apply -f -
 ```
