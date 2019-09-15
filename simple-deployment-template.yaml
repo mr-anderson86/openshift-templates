@@ -1,0 +1,34 @@
+apiVersion:v1
+kind: Template
+Labels:
+  template: some-template-label
+metadata:
+  annotations:
+    description: |- 
+        This template deploys a simple app, with image stream, pods, service, and route.
+    # Could be any icon, I just chose something at random
+    iconClass icon-python 
+    openshift.io/display-name: My Simple Application
+    tags: some,tag,whatever
+    name: my-simple-app
+
+objects:
+# You'll need this kind of secret if your docker registry needs some login
+# Otherwise (if docker registry is public), skip it
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: my-secret-name
+    annotations:
+    # This will allow you to revile the password on GUI
+    # If you wish not to allow password reviling, don't use this annotation!
+    tamplate.openshift.io/base64-expose-password: "{.data['password']}"
+  type: kubernetes.io/dockercfg
+  data:
+    .dockercfg: SomeRegistryHost,User,Password,AndEmail,All_In_Json,AllOfThat-encodeWithBase64
+
+- apiVersion:v1
+  kind: ImageStream
+  metadata:
+    name: ${SERVICE_NAME}
+  name: registry.host/path/to/docker/image
