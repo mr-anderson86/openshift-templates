@@ -1,6 +1,6 @@
 apiVersion:v1
 kind: Template
-Labels:
+labels:
   template: some-template-label
 metadata:
   annotations:
@@ -51,3 +51,49 @@ objects:
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
+    name: ${SERVICE_NAME}
+  spec:
+    # Better to have more than 1 replica, just in case 1 fails, 
+    # then the other will continue working until OpenShift creates the new pod.
+    replicas: 2
+    strategy:
+      type: Rolling
+      rollingParams:
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 120
+  template:
+    metadata:
+      annotations:
+        # The line below will allow your pod to use the image from the current namespace,
+        # This way, you could use the template in any namespace you wish.
+        alpha.image.policy.openshift.io/resolve-names: '*'
+      labels:
+        app: ${SERVICE_NAME}
+    spec:
+      containers:
+      - name: ${SERVICE_NAME}
+        # If you gave a different name to your ImageStream rather than "${SERVICE_NAME}", then put the different name below.
+        image: ${SERVICE_NAME}:${IMAGE_TAG}
+        ports:
+        -  containerPort: ${{PORT_NUMBER}}
+        # Checking if pod is ready (or if failed to create)
+        readinessProbe:
+          httpGet:
+            path: /is_alive # or any other endpoint for that matter.
+            port: ${{PORT_NUMBER}}
+            scheme: HTTP
+          periodSeconds: 30
+          timeoutSeconds: 10
+          successThreshold: 1
+          failureThreshold: 10
+        # Making sure pod is alive and well.
+        livenessProbe:
+          httpGet:
+            path: /is_alive # or any other endpoint for that matter.
+            port: ${{PORT_NUMBER}}
+            scheme: HTTP
+          periodSeconds: 60
+          timeoutSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
