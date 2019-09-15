@@ -96,3 +96,18 @@ objects:
           timeoutSeconds: 10
           successThreshold: 1
           failureThreshold: 3
+
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: ${SERVICE_NAME}
+    labels:
+      app: ${SERVICE_NAME}
+  spec:
+    ports:
+    - name: ${PORT_NUMBER}-tcp
+      port: ${{PORT_NUMBER}}
+      protocol: tcp
+      targetPost: ${{PORT_NUMBER}}
+    selector:
+      app: ${SERVICE_NAME}
