@@ -108,6 +108,19 @@ objects:
     - name: ${PORT_NUMBER}-tcp
       port: ${{PORT_NUMBER}}
       protocol: tcp
-      targetPost: ${{PORT_NUMBER}}
+      targetPort: ${{PORT_NUMBER}}
     selector:
       app: ${SERVICE_NAME}
+
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: ${SERVICE_NAME}
+    labels:
+      app: ${SERVICE_NAME}
+  spec:
+    port:
+      targetPort: ${{PORT_NUMBER}}-tcp
+    to:
+      kind: Service
+      name: ${SERVICE_NAME}
