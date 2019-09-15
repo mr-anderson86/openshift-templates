@@ -29,3 +29,7 @@ The below will give the output with given values, for example:
 ```bash
 oc process -f simple-deployment-template.yaml -p SERVICE_NAME=my-servicename -p IMAGE_TAG=some-image-tag
 ```
+The command below will perform the actual deployment:
+```bash
+oc process -f simple-deployment-template.yaml [-p PARAM=value] | oc apply -f -
+```
