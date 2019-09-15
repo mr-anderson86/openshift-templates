@@ -19,6 +19,9 @@ This repo contains a simple deployment file to use in OpenShift.
 # First, you need to login ;-)
 oc login <OS address> <your credentials or token>
 
+# Switch to your project/namespace:
+oc project <your project name>
+
 # The next command will show you the json output, after processing the parameters,
 # It's not must, but recommended, to make sure values are correct.
 
