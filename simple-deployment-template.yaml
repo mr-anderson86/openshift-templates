@@ -1,23 +1,23 @@
-apiVersion:v1
+apiVersion: v1
 kind: Template
 labels:
-  template: some-template-label
+  template: sprint-host-status-template
 metadata:
   annotations:
     description: |- 
-        This template deploys a simple app, with image stream, pods, service, and route.
+        This template deploys a simple web app, based on Java Spring library.
     # Could be any icon, I just chose something at random
-    iconClass icon-python 
-    openshift.io/display-name: My Simple Application
-    tags: some,tag,whatever
-    name: my-simple-app
+    iconClass: icon-python 
+    openshift.io/display-name: Spring Web Host Status
+    tags: spring,web,host,status
+    name: spring-host-status
 
 parameters:
 - name: SERVICE_NAME
   displayName: Service Name
   description: Service name for your application
   required: false
-  value: my-simple-app
+  value: spring-host-status
 - name: IMAGE_TAG
   displayName: Image Tag
   description: Docker image tag to use on the pod, default=latest.
@@ -25,9 +25,9 @@ parameters:
   value: latest
 - name: PORT_NUMBER
   displayName: port
-  description: Port number, default=8080.
+  description: Port number, default=8085.
   required: false
-  value: "8080"
+  value: "8085"
 
 objects:
 # You'll need this kind of secret if your docker registry needs some login
@@ -54,7 +54,7 @@ objects:
     tags:
       - from:
           kind: DockerImage
-          name: registry.host/path/to/docker/image
+          name: registry.gitlab.com/mr-anderson86/spring-host-status/spring-host-status
         importPolicy:
           # if youre registry is using secure but you don't can allow yourself to skip it...
           insecure: true
@@ -96,7 +96,7 @@ objects:
         # Checking if pod is ready (or if failed to create)
         readinessProbe:
           httpGet:
-            path: /is_alive # or any other endpoint for that matter.
+            path: / # or any other endpoint for that matter.
             port: ${{PORT_NUMBER}}
             scheme: HTTP
           periodSeconds: 30
@@ -106,7 +106,7 @@ objects:
         # Making sure pod is alive and well.
         livenessProbe:
           httpGet:
-            path: /is_alive # or any other endpoint for that matter.
+            path: / # or any other endpoint for that matter.
             port: ${{PORT_NUMBER}}
             scheme: HTTP
           periodSeconds: 60
