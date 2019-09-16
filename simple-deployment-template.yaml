@@ -137,7 +137,7 @@ objects:
       app: ${SERVICE_NAME}
   spec:
     port:
-      targetPort: ${{PORT_NUMBER}}-tcp
+      targetPort: ${PORT_NUMBER}-tcp
     to:
       kind: Service
       name: ${SERVICE_NAME}
