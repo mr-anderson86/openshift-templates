@@ -93,16 +93,6 @@ objects:
           image: ${SERVICE_NAME}:${IMAGE_TAG}
           ports:
           -  containerPort: ${{PORT_NUMBER}}
-          # Checking if pod is ready (or if failed to create)
-          readinessProbe:
-            httpGet:
-              path: / # or any other endpoint for that matter. example: /is_alive
-              port: ${{PORT_NUMBER}}
-              scheme: HTTP
-            periodSeconds: 30
-            timeoutSeconds: 10
-            successThreshold: 1
-            failureThreshold: 10
           # Making sure pod is alive and well.
           livenessProbe:
             httpGet:
